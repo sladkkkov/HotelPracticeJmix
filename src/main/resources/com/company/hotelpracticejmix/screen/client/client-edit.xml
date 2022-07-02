@@ -39,7 +39,7 @@
                 <textField id="lastNameField" property="lastName"/>
                 <textField id="emailField" property="email"/>
                 <checkBox id="activeField" property="active"/>
-                <textField id="contactTelephoneField" property="contact.telephone"/>
+                <maskedField  id="contactTelephoneField" mask="(###) ###-##-##" property="contact.telephone"/>
                 <textField id="contactEmailField" property="contact.email"/>
             </column>
         </form>
