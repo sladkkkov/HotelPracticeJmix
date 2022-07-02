@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<menu-config xmlns="http://jmix.io/schema/ui/menu">
+
+    <menu id="application" caption="msg://com.company.hotelpracticejmix/menu.application" insertBefore="administration">
+        <item screen="User.browse" caption="msg://com.company.hotelpracticejmix.screen.user/UserBrowse.caption"/>
+
+        <item screen="themeSettingsScreen" caption="msg://io.jmix.ui.app.themesettings/themeSettings.caption"/>
+        <item screen="Apartaments.browse" caption="msg://com.company.hotelpracticejmix/menu_config.Apartaments.browse"/>
+        <item screen="Client.browse" caption="msg://com.company.hotelpracticejmix/menu_config.Client.browse"/>
+        <item screen="RegistrationCard.browse"
+              caption="msg://com.company.hotelpracticejmix/menu_config.RegistrationCard.browse"/>
+        <item screen="HomeUserView"
+              caption="msg://com.company.hotelpracticejmix.screen.blankscreenh/homeUserView.caption"/>
+    </menu>
+
+</menu-config>

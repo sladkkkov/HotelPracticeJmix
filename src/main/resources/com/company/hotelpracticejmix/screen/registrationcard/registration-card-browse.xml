@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://jmix.io/schema/ui/window"
+        xmlns:c="http://jmix.io/schema/ui/jpql-condition"
+        caption="msg://registrationCardBrowse.caption"
+        focusComponent="registrationCardsTable">
+    <data readOnly="true">
+        <collection id="registrationCardsDc"
+                    class="com.company.hotelpracticejmix.entity.RegistrationCard">
+            <fetchPlan extends="_base">
+                <property name="client">
+                    <property name="contact" fetchPlan="_base"/>
+                </property>
+                <property name="apartaments">
+                    <property name="numberApartament"/>
+                </property>
+            </fetchPlan>
+            <loader id="registrationCardsDl">
+                <query>
+                    <![CDATA[select e from RegistrationCard e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <screenSettings id="settingsFacet" auto="true"/>
+    </facets>
+    <actions>
+        <action id="lookupSelectAction"
+                caption="msg:///actions.Select"
+                icon="LOOKUP_OK"
+                primary="true"
+                shortcut="${COMMIT_SHORTCUT}"/>
+        <action id="lookupCancelAction"
+                caption="msg:///actions.Cancel"
+                icon="LOOKUP_CANCEL"/>
+    </actions>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="registrationCardsTable" spacing="true">
+        <filter id="filter"
+                dataLoader="registrationCardsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="registrationCardsTable"
+                    width="100%"
+                    dataContainer="registrationCardsDc">
+            <actions>
+                <action id="add" type="add"/>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="client"/>
+                <column id="apartaments"/>
+                <column id="resultsCovidTest"/>
+                <column id="paymentDate"/>
+                <column id="prepaymentDate"/>
+                <column id="prepaymentIndication"/>
+                <column id="paymentIndication"/>
+                <column id="arrivalDate"/>
+                <column id="departureDate"/>
+            </columns>
+            <simplePagination/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="addBtn" action="registrationCardsTable.add"/>
+                <button id="createBtn" action="registrationCardsTable.create"/>
+                <button id="editBtn" action="registrationCardsTable.edit"/>
+                <button id="removeBtn" action="registrationCardsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
