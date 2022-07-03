@@ -35,29 +35,27 @@
                 dataLoader="apartamentsesDl">
             <properties include=".*"/>
         </filter>
-        <groupTable id="apartamentsesTable"
-                    width="100%"
-                    dataContainer="apartamentsesDc">
+        <dataGrid id="apartamentsesTable"
+                  width="100%"
+                  dataContainer="apartamentsesDc">
             <actions>
-                <action id="add" type="add"/>
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
-                <column id="numberApartament"/>
-                <column id="apartamentReservation"/>
-                <column id="apartmentTaken"/>
+                <column property="numberApartament" id="numberApartament"/>
+                <column property="apartamentReservation" id="apartamentReservation"/>
+                <column property="apartmentTaken" id="apartmentTaken"/>
             </columns>
             <simplePagination/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
-                <button id="addBtn" action="apartamentsesTable.add"/>
                 <button id="createBtn" action="apartamentsesTable.create"/>
                 <button id="editBtn" action="apartamentsesTable.edit"/>
                 <button id="removeBtn" action="apartamentsesTable.remove"/>
             </buttonsPanel>
-        </groupTable>
+        </dataGrid>
         <hbox id="lookupActions" spacing="true" visible="false">
             <button action="lookupSelectAction"/>
             <button action="lookupCancelAction"/>

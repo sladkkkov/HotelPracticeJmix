@@ -1,18 +1,24 @@
 package com.company.hotelpracticejmix.entity;
 
 import io.jmix.core.DeletePolicy;
+import io.jmix.core.FileRef;
 import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.entity.annotation.OnDelete;
 import io.jmix.core.entity.annotation.OnDeleteInverse;
 import io.jmix.core.metamodel.annotation.JmixEntity;
+import io.jmix.ui.screen.Install;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
@@ -72,12 +78,16 @@ public class RegistrationCard {
     @JoinColumn(name = "APARTAMENTS_ID")
     private Apartaments apartaments;
 
-    @Column(name = "RESULTS_COVID_TEST")
-    private Boolean resultsCovidTest;
 
+    @NotNull(message = "{msg://com.company.hotelpracticejmix.entity/RegistrationCard.resultsCovidTest.validation.NotNull}")
+    @Column(name = "RESULTS_COVID_TEST")
+    private FileRef resultsCovidTest;
+
+    @PastOrPresent(message = "{msg://com.company.hotelpracticejmix.entity/RegistrationCard.paymentDate.validation.PastOrPresent}")
     @Column(name = "PAYMENT_DATE")
     private LocalDate paymentDate;
 
+    @PastOrPresent(message = "{msg://com.company.hotelpracticejmix.entity/RegistrationCard.prepaymentDate.validation.PastOrPresent}")
     @Column(name = "PREPAYMENT_DATE")
     private LocalDate prepaymentDate;
 
@@ -87,11 +97,22 @@ public class RegistrationCard {
     @Column(name = "PAYMENT_INDICATION")
     private Boolean paymentIndication;
 
+    @FutureOrPresent(message = "{msg://com.company.hotelpracticejmix.entity/RegistrationCard.arrivalDate.validation.FutureOrPresent}")
     @Column(name = "ARRIVAL_DATE")
     private LocalDate arrivalDate;
 
+    @Future(message = "{msg://com.company.hotelpracticejmix.entity/RegistrationCard.departureDate.validation.Future}")
     @Column(name = "DEPARTURE_DATE")
     private LocalDate departureDate;
+
+    public void setResultsCovidTest(FileRef resultsCovidTest) {
+        this.resultsCovidTest = resultsCovidTest;
+    }
+
+    public @NotNull(message = "{msg://com.company.hotelpracticejmix.entity/RegistrationCard.resultsCovidTest.validation.NotNull}") FileRef getResultsCovidTest() {
+        return resultsCovidTest;
+    }
+
 
     public void setApartaments(Apartaments apartaments) {
         this.apartaments = apartaments;
@@ -149,13 +170,7 @@ public class RegistrationCard {
         this.paymentDate = paymentDate;
     }
 
-    public Boolean getResultsCovidTest() {
-        return resultsCovidTest;
-    }
 
-    public void setResultsCovidTest(Boolean resultsCovidTest) {
-        this.resultsCovidTest = resultsCovidTest;
-    }
 
     public Client getClient() {
         return client;

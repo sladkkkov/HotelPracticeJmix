@@ -54,7 +54,11 @@
             <columns>
                 <column id="client"/>
                 <column id="apartaments"/>
-                <column id="resultsCovidTest"/>
+                <column id="resultsCovidTest">
+                    <formatter>
+                        <custom bean="covidImageFormatter"/>
+                    </formatter>
+                </column>
                 <column id="paymentDate"/>
                 <column id="prepaymentDate"/>
                 <column id="prepaymentIndication"/>

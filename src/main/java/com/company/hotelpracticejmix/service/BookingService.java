@@ -21,13 +21,9 @@ public class BookingService {
     @Autowired
     private DataManager dataManager;
 
-    List<Apartaments> setCustomerCodeInSession(String code) {
+   public List<Apartaments> getFreeApartament() {
         return dataManager.load(Apartaments.class).condition(LogicalCondition.and
                 (PropertyCondition.equal("apartament_reservation", false))).list();
     }
 
-    @EventListener
-    public void onApartamentsLoading(EntityLoadingEvent<Apartaments> event) {
-
-    }
 }

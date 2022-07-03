@@ -47,7 +47,8 @@
                             <action id="entityClear" type="entity_clear"/>
                         </actions>
                     </entityPicker>
-                    <checkBox id="resultsCovidTestField" property="resultsCovidTest"/>
+
+                    <fileStorageUpload  id="resultsCovidTestField" showFileName="true" property="resultsCovidTest"/>
                     <dateField id="paymentDateField" property="paymentDate"/>
                     <dateField id="prepaymentDateField" property="prepaymentDate"/>
                     <checkBox id="prepaymentIndicationField" property="prepaymentIndication"/>

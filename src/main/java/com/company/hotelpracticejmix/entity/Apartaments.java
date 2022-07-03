@@ -3,6 +3,7 @@ package com.company.hotelpracticejmix.entity;
 import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
+import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import org.springframework.data.annotation.CreatedBy;
@@ -67,6 +68,11 @@ public class Apartaments {
     @Column(name = "DELETED_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedDate;
+
+    @DependsOnProperties({"numberApartament"})
+    public String getDisplayName() {
+        return String.format("Комната №%s",  numberApartament).trim();
+    }
 
     public Long getNumberApartament() {
         return numberApartament;

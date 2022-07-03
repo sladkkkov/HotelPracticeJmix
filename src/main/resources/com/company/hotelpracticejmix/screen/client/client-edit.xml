@@ -10,7 +10,6 @@
                 <property name="username"/>
                 <property name="firstName"/>
                 <property name="lastName"/>
-                <property name="email"/>
                 <property name="active"/>
             </fetchPlan>
             <loader/>
@@ -37,7 +36,6 @@
                 <textField id="usernameField" property="username"/>
                 <textField id="firstNameField" property="firstName"/>
                 <textField id="lastNameField" property="lastName"/>
-                <textField id="emailField" property="email"/>
                 <checkBox id="activeField" property="active"/>
                 <maskedField  id="contactTelephoneField" mask="(###) ###-##-##" property="contact.telephone"/>
                 <textField id="contactEmailField" property="contact.email"/>
