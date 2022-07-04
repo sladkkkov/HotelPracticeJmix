@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -19,6 +20,7 @@ public class Contact {
     @NotEmpty(message = "Поле не должно быть пустым")
 
     @Column(name = "EMAIL")
+    @Email
     private String email;
 
     public void setTelephone(String telephone) {

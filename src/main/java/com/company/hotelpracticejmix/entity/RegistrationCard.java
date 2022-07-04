@@ -8,7 +8,6 @@ import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.entity.annotation.OnDelete;
 import io.jmix.core.entity.annotation.OnDeleteInverse;
 import io.jmix.core.metamodel.annotation.JmixEntity;
-import io.jmix.ui.screen.Install;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -66,12 +65,14 @@ public class RegistrationCard {
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedDate;
 
+    @NotNull
     @OnDeleteInverse(DeletePolicy.CASCADE)
     @OnDelete(DeletePolicy.CASCADE)
     @JoinColumn(name = "CLIENT_ID")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Client client;
+    private User user;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDeleteInverse(DeletePolicy.CASCADE)
     @OnDelete(DeletePolicy.CASCADE)
@@ -83,10 +84,12 @@ public class RegistrationCard {
     @Column(name = "RESULTS_COVID_TEST")
     private FileRef resultsCovidTest;
 
+    @NotNull
     @PastOrPresent(message = "{msg://com.company.hotelpracticejmix.entity/RegistrationCard.paymentDate.validation.PastOrPresent}")
     @Column(name = "PAYMENT_DATE")
     private LocalDate paymentDate;
 
+    @NotNull
     @PastOrPresent(message = "{msg://com.company.hotelpracticejmix.entity/RegistrationCard.prepaymentDate.validation.PastOrPresent}")
     @Column(name = "PREPAYMENT_DATE")
     private LocalDate prepaymentDate;
@@ -97,10 +100,12 @@ public class RegistrationCard {
     @Column(name = "PAYMENT_INDICATION")
     private Boolean paymentIndication;
 
+    @NotNull
     @FutureOrPresent(message = "{msg://com.company.hotelpracticejmix.entity/RegistrationCard.arrivalDate.validation.FutureOrPresent}")
     @Column(name = "ARRIVAL_DATE")
     private LocalDate arrivalDate;
 
+    @NotNull
     @Future(message = "{msg://com.company.hotelpracticejmix.entity/RegistrationCard.departureDate.validation.Future}")
     @Column(name = "DEPARTURE_DATE")
     private LocalDate departureDate;
@@ -172,12 +177,12 @@ public class RegistrationCard {
 
 
 
-    public Client getClient() {
-        return client;
+    public User getClient() {
+        return user;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setClient(User user) {
+        this.user = user;
     }
 
 

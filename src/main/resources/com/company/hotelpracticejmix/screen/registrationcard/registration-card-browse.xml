@@ -7,7 +7,7 @@
         <collection id="registrationCardsDc"
                     class="com.company.hotelpracticejmix.entity.RegistrationCard">
             <fetchPlan extends="_base">
-                <property name="client">
+                <property name="user">
                     <property name="contact" fetchPlan="_base"/>
                 </property>
                 <property name="apartaments">
@@ -52,7 +52,7 @@
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
-                <column id="client"/>
+                <column id="user"/>
                 <column id="apartaments"/>
                 <column id="resultsCovidTest">
                     <formatter>

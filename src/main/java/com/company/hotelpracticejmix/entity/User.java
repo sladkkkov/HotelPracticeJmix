@@ -12,7 +12,6 @@ import io.jmix.security.authentication.JmixUserDetails;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
@@ -49,9 +48,6 @@ public class User implements JmixUserDetails, HasTimeZone {
     @Column(name = "LAST_NAME")
     protected String lastName;
 
-    @Email
-    @Column(name = "EMAIL")
-    protected String email;
 
     @Column(name = "ACTIVE")
     protected Boolean active = true;
@@ -59,8 +55,20 @@ public class User implements JmixUserDetails, HasTimeZone {
     @Column(name = "TIME_ZONE_ID")
     protected String timeZoneId;
 
+    @EmbeddedParameters(nullAllowed = false)
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "telephone", column = @Column(name = "CONTACT_TELEPHONE")),
+            @AttributeOverride(name = "email", column = @Column(name = "CONTACT_EMAIL"))
+    })
+    private Contact contact;
+
     @Transient
     protected Collection<? extends GrantedAuthority> authorities;
+
+    public Contact getContact() {
+        return contact;
+    }
 
     public UUID getId() {
         return id;
@@ -103,14 +111,6 @@ public class User implements JmixUserDetails, HasTimeZone {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -135,6 +135,10 @@ public class User implements JmixUserDetails, HasTimeZone {
     @Override
     public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
         this.authorities = authorities;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 
     @Override

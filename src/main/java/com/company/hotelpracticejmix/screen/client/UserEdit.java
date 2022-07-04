@@ -1,4 +1,4 @@
-package com.company.hotelpracticejmix.screen.user;
+package com.company.hotelpracticejmix.screen.client;
 
 import com.company.hotelpracticejmix.entity.User;
 import io.jmix.core.EntityStates;

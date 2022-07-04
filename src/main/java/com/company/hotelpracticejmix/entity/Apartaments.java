@@ -26,7 +26,6 @@ public class Apartaments {
     @Id
     private UUID id;
 
-    @InstanceName
     @Max(25)
     @Min(1)
     @Column(name = "NUMBER_APARTAMENT", unique = true)
@@ -69,6 +68,7 @@ public class Apartaments {
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedDate;
 
+    @InstanceName
     @DependsOnProperties({"numberApartament"})
     public String getDisplayName() {
         return String.format("Комната №%s",  numberApartament).trim();
