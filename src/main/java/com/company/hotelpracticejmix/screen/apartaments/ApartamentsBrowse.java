@@ -1,10 +1,14 @@
 package com.company.hotelpracticejmix.screen.apartaments;
 
 import com.company.hotelpracticejmix.entity.Apartaments;
+import io.jmix.ui.ScreenBuilders;
+import io.jmix.ui.component.DataGrid;
+import io.jmix.ui.model.InstanceContainer;
 import io.jmix.ui.screen.LookupComponent;
 import io.jmix.ui.screen.StandardLookup;
 import io.jmix.ui.screen.UiController;
 import io.jmix.ui.screen.UiDescriptor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @UiController("Apartaments.browse")
 @UiDescriptor("apartaments-browse.xml")
@@ -22,10 +26,6 @@ public class ApartamentsBrowse extends StandardLookup<Apartaments> {
       public void actionFreeApartament(Action.ActionPerformedEvent event) {
 
       }*/
-/*
-    @Autowired
-    protected DataGrid<Apartaments> ordersDataGrid;
-*/
 
   /*@Subscribe
     protected void onInit(InitEvent event) {
@@ -33,5 +33,6 @@ public class ApartamentsBrowse extends StandardLookup<Apartaments> {
                 .withHandler(actionPerformedEvent ->
                         ordersDataGrid.setDetailsVisible(ordersDataGrid.getSingleSelected(), true)));
     }*/
+
 
 }

@@ -27,7 +27,7 @@ public interface SimpleUserRole {
     @SpecificPolicy(resources = {"ui.loginToUi", "datatools.ui.showEntityInfo"})
     void specific();
 
-    @MenuPolicy(menuIds = {"Apartaments.browse", "RegistrationCard.browse"})
-    @ScreenPolicy(screenIds = {"Apartaments.browse", "RegistrationCard.browse"})
+    @MenuPolicy(menuIds = {"Apartaments.browse"})
+    @ScreenPolicy(screenIds = {"Apartaments.browse"})
     void screens();
 }

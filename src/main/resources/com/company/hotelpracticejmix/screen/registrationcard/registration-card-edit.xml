@@ -6,12 +6,7 @@
         <instance id="registrationCardDc"
                   class="com.company.hotelpracticejmix.entity.RegistrationCard">
             <fetchPlan extends="_base">
-                <property name="user">
-                    <property name="contact" fetchPlan="_base"/>
-                </property>
-                <property name="apartaments">
-                    <property name="numberApartament"/>
-                </property>
+                <property name="apartaments" fetchPlan="_base"/>
             </fetchPlan>
             <loader/>
         </instance>
@@ -35,20 +30,13 @@
         <scrollBox id="scrollBox" spacing="true">
             <form id="form" dataContainer="registrationCardDc">
                 <column width="350px">
-                    <entityPicker id="clientField" property="user">
-                        <actions>
-                            <action id="entityLookup" type="entity_lookup"/>
-                            <action id="entityClear" type="entity_clear"/>
-                        </actions>
-                    </entityPicker>
                     <entityPicker id="apartamentsField" property="apartaments">
                         <actions>
                             <action id="entityLookup" type="entity_lookup"/>
                             <action id="entityClear" type="entity_clear"/>
                         </actions>
                     </entityPicker>
-
-                    <fileStorageUpload  id="resultsCovidTestField" showFileName="true" property="resultsCovidTest"/>
+                    <fileStorageUpload id="resultsCovidTestField" property="resultsCovidTest"/>
                     <dateField id="paymentDateField" property="paymentDate"/>
                     <dateField id="prepaymentDateField" property="prepaymentDate"/>
                     <checkBox id="prepaymentIndicationField" property="prepaymentIndication"/>

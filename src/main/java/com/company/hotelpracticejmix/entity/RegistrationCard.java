@@ -66,7 +66,7 @@ public class RegistrationCard {
     private Date deletedDate;
 
     @NotNull
-    @OnDeleteInverse(DeletePolicy.CASCADE)
+    @OnDeleteInverse(DeletePolicy.DENY)
     @OnDelete(DeletePolicy.CASCADE)
     @JoinColumn(name = "CLIENT_ID")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -109,6 +109,10 @@ public class RegistrationCard {
     @Future(message = "{msg://com.company.hotelpracticejmix.entity/RegistrationCard.departureDate.validation.Future}")
     @Column(name = "DEPARTURE_DATE")
     private LocalDate departureDate;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public void setResultsCovidTest(FileRef resultsCovidTest) {
         this.resultsCovidTest = resultsCovidTest;
@@ -178,6 +182,10 @@ public class RegistrationCard {
 
 
     public User getClient() {
+        return user;
+    }
+
+    public User getUser() {
         return user;
     }
 

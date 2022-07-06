@@ -2,6 +2,14 @@
 <window xmlns="http://jmix.io/schema/ui/window"
         caption="msg://homeUserView.caption">
     <layout>
-        <button/>
+        <vbox margin="true"
+              spacing="true">
+            <button id="bookHotel"
+                    caption="msg://button.bookHotel"
+                    description="msg://button.descriptionBookHotel"/>
+            <groupBox id="groupBoxLayout" caption="Ваши заказы" orientation="horizontal"
+                      outerMargin="true, true, true, true"
+                      align="TOP_CENTER" height="100%" width="100%"/>
+        </vbox>
     </layout>
 </window>

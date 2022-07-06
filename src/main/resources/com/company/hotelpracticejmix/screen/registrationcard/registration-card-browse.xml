@@ -6,13 +6,16 @@
     <data readOnly="true">
         <collection id="registrationCardsDc"
                     class="com.company.hotelpracticejmix.entity.RegistrationCard">
-            <fetchPlan extends="_base">
-                <property name="user">
-                    <property name="contact" fetchPlan="_base"/>
-                </property>
-                <property name="apartaments">
-                    <property name="numberApartament"/>
-                </property>
+            <fetchPlan>
+                <property name="user" fetchPlan="_base"/>
+                <property name="apartaments" fetchPlan="_base"/>
+                <property name="resultsCovidTest"/>
+                <property name="paymentDate"/>
+                <property name="prepaymentDate"/>
+                <property name="prepaymentIndication"/>
+                <property name="paymentIndication"/>
+                <property name="arrivalDate"/>
+                <property name="departureDate"/>
             </fetchPlan>
             <loader id="registrationCardsDl">
                 <query>
@@ -42,9 +45,9 @@
                 dataLoader="registrationCardsDl">
             <properties include=".*"/>
         </filter>
-        <groupTable id="registrationCardsTable"
-                    width="100%"
-                    dataContainer="registrationCardsDc">
+        <dataGrid id="registrationCardsTable"
+                  width="100%"
+                  dataContainer="registrationCardsDc">
             <actions>
                 <action id="add" type="add"/>
                 <action id="create" type="create"/>
@@ -52,19 +55,15 @@
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
-                <column id="user"/>
-                <column id="apartaments"/>
-                <column id="resultsCovidTest">
-                    <formatter>
-                        <custom bean="covidImageFormatter"/>
-                    </formatter>
-                </column>
-                <column id="paymentDate"/>
-                <column id="prepaymentDate"/>
-                <column id="prepaymentIndication"/>
-                <column id="paymentIndication"/>
-                <column id="arrivalDate"/>
-                <column id="departureDate"/>
+                <column property="user" id="user"/>
+                <column property="apartaments" id="apartaments"/>
+                <column property="resultsCovidTest" id="resultsCovidTest"/>
+                <column property="paymentDate" id="paymentDate"/>
+                <column property="prepaymentDate" id="prepaymentDate"/>
+                <column property="prepaymentIndication" id="prepaymentIndication"/>
+                <column property="paymentIndication" id="paymentIndication"/>
+                <column property="arrivalDate" id="arrivalDate"/>
+                <column property="departureDate" id="departureDate"/>
             </columns>
             <simplePagination/>
             <buttonsPanel id="buttonsPanel"
@@ -74,7 +73,7 @@
                 <button id="editBtn" action="registrationCardsTable.edit"/>
                 <button id="removeBtn" action="registrationCardsTable.remove"/>
             </buttonsPanel>
-        </groupTable>
+        </dataGrid>
         <hbox id="lookupActions" spacing="true" visible="false">
             <button action="lookupSelectAction"/>
             <button action="lookupCancelAction"/>
