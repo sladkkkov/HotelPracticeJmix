@@ -66,8 +66,7 @@ public class RegistrationCard {
     private Date deletedDate;
 
     @NotNull
-    @OnDeleteInverse(DeletePolicy.DENY)
-    @OnDelete(DeletePolicy.CASCADE)
+    @OnDelete(DeletePolicy.UNLINK)
     @JoinColumn(name = "CLIENT_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
@@ -75,7 +74,7 @@ public class RegistrationCard {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDeleteInverse(DeletePolicy.CASCADE)
-    @OnDelete(DeletePolicy.CASCADE)
+    @OnDelete(DeletePolicy.UNLINK)
     @JoinColumn(name = "APARTAMENTS_ID")
     private Apartaments apartaments;
 

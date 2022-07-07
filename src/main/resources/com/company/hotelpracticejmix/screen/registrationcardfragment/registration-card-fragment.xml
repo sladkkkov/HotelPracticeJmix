@@ -3,7 +3,9 @@
     <facets>
         <timer id="timer"
                autostart="true"
-               delay="86400000"/>
+               repeating="true"
+               delay="1000"/>
+
     </facets>
     <layout>
             <groupBox id="registrationCardBox"
@@ -18,6 +20,16 @@
                 <checkBox id="paymentCheckBox"  caption="Оплата заказа"/>
                 <checkBox id="prepaymentCheckBox"  caption="Предоплата заказа" />
                 <checkBox id="covidResultCheckBox" caption="Результаты ПЦР теста на Covid-2019"/>
+                <popupButton id="paymentButton"
+                             caption="Оплатить"
+                             icon="SAVE">
+                    <actions>
+                        <action id="prepaymentAction" caption="Внести предоплату"/>
+                        <action id="paymentAction" caption="Внести основную часть"/>
+                        <action id="allPaymentAction" caption="Оплатить полностью"/>
+                    </actions>
+                </popupButton>
+                <label id="labelTimer"/>
             </groupBox>
             <label height="20px"/>
 

@@ -39,8 +39,6 @@
                     <fileStorageUpload id="resultsCovidTestField" property="resultsCovidTest"/>
                     <dateField id="paymentDateField" property="paymentDate"/>
                     <dateField id="prepaymentDateField" property="prepaymentDate"/>
-                    <checkBox id="prepaymentIndicationField" property="prepaymentIndication"/>
-                    <checkBox id="paymentIndicationField" property="paymentIndication"/>
                     <dateField id="arrivalDateField" property="arrivalDate"/>
                     <dateField id="departureDateField" property="departureDate"/>
                 </column>

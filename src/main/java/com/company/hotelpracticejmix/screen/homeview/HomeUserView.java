@@ -12,7 +12,6 @@ import io.jmix.ui.ScreenBuilders;
 import io.jmix.ui.action.BaseAction;
 import io.jmix.ui.component.Button;
 import io.jmix.ui.component.GroupBoxLayout;
-import io.jmix.ui.component.Label;
 import io.jmix.ui.screen.Screen;
 import io.jmix.ui.screen.Subscribe;
 import io.jmix.ui.screen.UiController;
@@ -20,7 +19,6 @@ import io.jmix.ui.screen.UiDescriptor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Optional;
 
 @UiController("HomeUserView")
 @UiDescriptor("home-user-view.xml")
@@ -75,11 +73,6 @@ public class HomeUserView extends Screen {
                                 .build().show()));
     }
 }
-
-/*    RegistrationCard registrationCard = dataManager
-            .load(RegistrationCard.class)
-            .condition(PropertyCondition
-                    .equal("client",*/
 
 
 
