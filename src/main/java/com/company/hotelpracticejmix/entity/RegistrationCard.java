@@ -97,10 +97,10 @@ public class RegistrationCard {
     private LocalDate prepaymentDate;
 
     @Column(name = "PREPAYMENT_INDICATION")
-    private Boolean prepaymentIndication;
+    private Boolean prepaymentIndication = false;
 
     @Column(name = "PAYMENT_INDICATION")
-    private Boolean paymentIndication;
+    private Boolean paymentIndication = false;
 
     @NotNull
     @FutureOrPresent(message = "{msg://com.company.hotelpracticejmix.entity/RegistrationCard.arrivalDate.validation.FutureOrPresent}")
