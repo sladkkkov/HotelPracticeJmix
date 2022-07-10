@@ -83,6 +83,9 @@ public class RegistrationCard {
     @Column(name = "RESULTS_COVID_TEST")
     private FileRef resultsCovidTest;
 
+    @Column(name = "RESULTS_COVID_TEST_VALIDATION")
+    private Boolean resultsCovidTestValidation;
+
     @NotNull
     @PastOrPresent(message = "{msg://com.company.hotelpracticejmix.entity/RegistrationCard.paymentDate.validation.PastOrPresent}")
     @Column(name = "PAYMENT_DATE")
@@ -108,6 +111,14 @@ public class RegistrationCard {
     @Future(message = "{msg://com.company.hotelpracticejmix.entity/RegistrationCard.departureDate.validation.Future}")
     @Column(name = "DEPARTURE_DATE")
     private LocalDate departureDate;
+
+    public Boolean getResultsCovidTestValidation() {
+        return resultsCovidTestValidation;
+    }
+
+    public void setResultsCovidTestValidation(Boolean resultsCovidTestValidation) {
+        this.resultsCovidTestValidation = resultsCovidTestValidation;
+    }
 
     public void setUser(User user) {
         this.user = user;

@@ -37,8 +37,6 @@
                         </actions>
                     </entityPicker>
                     <fileStorageUpload id="resultsCovidTestField" property="resultsCovidTest"/>
-                    <dateField id="paymentDateField" property="paymentDate"/>
-                    <dateField id="prepaymentDateField" property="prepaymentDate"/>
                     <dateField id="arrivalDateField" property="arrivalDate"/>
                     <dateField id="departureDateField" property="departureDate"/>
                 </column>

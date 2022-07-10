@@ -7,14 +7,13 @@ import io.jmix.ui.Dialogs;
 import io.jmix.ui.Notifications;
 import io.jmix.ui.action.Action;
 import io.jmix.ui.component.*;
-import io.jmix.ui.model.InstanceContainer;
 import io.jmix.ui.screen.ScreenFragment;
 import io.jmix.ui.screen.Subscribe;
 import io.jmix.ui.screen.UiController;
 import io.jmix.ui.screen.UiDescriptor;
-import org.apache.tomcat.jni.Address;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
@@ -23,9 +22,9 @@ import java.util.UUID;
 @UiDescriptor("registration-card-fragment.xml")
 public class RegistrationCardFragment extends ScreenFragment {
     @Autowired
-    protected Timer timer;
+    private Timer timer;
 
-    protected int seconds = 0;
+    private long seconds = 0;
 
     @Autowired
     private Dialogs dialogs;
@@ -43,10 +42,6 @@ public class RegistrationCardFragment extends ScreenFragment {
 
     @Autowired
     private TextField<String> clientNameLabel;
-
-    public void setSeconds(int seconds) {
-        this.seconds = seconds;
-    }
 
     @Autowired
     private TextField<String> apartamentNumberLabel;
@@ -73,7 +68,6 @@ public class RegistrationCardFragment extends ScreenFragment {
 
     private LocalDate dateDeparture;
     private String apartanemtNumber;
-
     private Boolean paymentIndication;
     private Boolean prepaymentIndication;
 
@@ -91,8 +85,8 @@ public class RegistrationCardFragment extends ScreenFragment {
 
     private Boolean covidResult;
 
-    public void setApartanemtNumber(String apartanemtNumber) {
-        this.apartanemtNumber = apartanemtNumber;
+    public void setApartmentNumber(String apartmentNumber) {
+        this.apartanemtNumber = apartmentNumber;
     }
 
     public void setDateArrival(LocalDate dateArrival) {
@@ -115,36 +109,82 @@ public class RegistrationCardFragment extends ScreenFragment {
         prepaymentCheckBox.setValue(prepaymentIndication);
     }
 
+    public void showNotification(String message) {
+        notifications.create(Notifications.NotificationType.TRAY)
+                .withCaption(message)
+                .show();
+    }
+
     @Subscribe("timer")
     protected void onTimerFacetTick(Timer.TimerActionEvent event) {
         seconds += event.getSource().getDelay() / 1000;
-        labelTimer.setValue(LocalTime.ofSecondOfDay(86400 - seconds) + " внесите предоплату.");
+        labelTimer.setValue(LocalTime.ofSecondOfDay(Duration.ofDays(1).getSeconds() - seconds) + " внесите предоплату.");
 
-        if (seconds == 5) {
-            RegistrationCard registrationCard = dataManager.load(RegistrationCard.class).id(uuid).one();
-            dataManager.remove(registrationCard);
-         /*   dataManager.remove(dataManager.load(RegistrationCard.class).id(uuid).one());
-            dataManager.remove(Id.of(uuid, RegistrationCard.class));*/
+        if (seconds == Duration.ofDays(1).getSeconds()) {
+            dataManager.remove(Id.of(uuid, RegistrationCard.class));
 
-            notifications.create(Notifications.NotificationType.TRAY)
-                    .withCaption("Бронирование было отменено. Вы не произвели предоплату в течении суток.")
-                    .show();
+            showNotification("Бронирование было отменено. Вы не произвели предоплату в течении суток.");
         }
+    }
 
+
+    @Subscribe("paymentButton.paymentAction")
+    public void onPaymentButtonPaymentAction(Action.ActionPerformedEvent event) {
+        RegistrationCard registrationCard = dataManager.load(RegistrationCard.class).id(uuid).one();
+        if (registrationCard.getPaymentIndication().equals(true)) {
+            showNotification("Оплата уже внесена");
+        } else {
+            if (registrationCard.getPrepaymentIndication().equals(true)) {
+
+                dialogs.createMessageDialog()
+                        .withCaption("Успешно")
+                        .withMessage("Ваша оплата принята")
+                        .show();
+
+                registrationCard.setPaymentIndication(true);
+                registrationCard.setPaymentDate(LocalDate.now());
+                dataManager.save(registrationCard);
+            }
+        }
 
     }
 
+    @Subscribe("paymentButton.allPaymentAction")
+    public void onPaymentButtonAllPaymentAction(Action.ActionPerformedEvent event) {
+        RegistrationCard registrationCard = dataManager.load(RegistrationCard.class).id(uuid).one();
+        if (registrationCard.getPrepaymentIndication().equals(true) || registrationCard.getPaymentIndication().equals(true)) {
+            showNotification("Ваш заказ уже частично оплачен");
+        } else {
+            dialogs.createMessageDialog()
+                    .withCaption("Успешно")
+                    .withMessage("Ваша оплата принята")
+                    .show();
+
+            registrationCard.setPaymentIndication(true);
+            registrationCard.setPrepaymentIndication(true);
+            registrationCard.setPrepaymentDate(LocalDate.now());
+            registrationCard.setPaymentDate(LocalDate.now());
+            dataManager.save(registrationCard);
+        }
+    }
+
     @Subscribe("paymentButton.prepaymentAction")
-    protected void onPopupButton1PopupAction1ActionPerformed(Action.ActionPerformedEvent event) {
-        dialogs.createMessageDialog()
-                .withCaption("Успешно")
-                .withMessage("Ваша предоплата принята")
-                .show();
+    public void onPaymentButtonPrepaymentAction(Action.ActionPerformedEvent event) {
 
         RegistrationCard registrationCard = dataManager.load(RegistrationCard.class).id(uuid).one();
-        registrationCard.setPrepaymentIndication(true);
-        registrationCard.setPrepaymentDate(LocalDate.now());
-        dataManager.save(registrationCard);
+        if (registrationCard.getPrepaymentIndication().equals(true)) {
+            showNotification("Предоплата уже внесена");
+        } else {
+
+            dialogs.createMessageDialog()
+                    .withCaption("Успешно")
+                    .withMessage("Ваша оплата принята")
+                    .show();
+
+            registrationCard.setPrepaymentIndication(true);
+            registrationCard.setPrepaymentDate(LocalDate.now());
+            dataManager.save(registrationCard);
+        }
     }
 
     @Subscribe("prepaymentCheckBox")
@@ -158,8 +198,6 @@ public class RegistrationCardFragment extends ScreenFragment {
 
         labelTimer.setValue("Предоплата произведена");
 
-        notifications.create(Notifications.NotificationType.TRAY)
-                .withCaption("Предоплата произведена")
-                .show();
+        showNotification("Предоплата произведена");
     }
 }

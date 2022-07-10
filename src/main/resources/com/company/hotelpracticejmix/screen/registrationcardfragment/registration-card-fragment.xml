@@ -12,13 +12,14 @@
                       caption="Заказ"
                       collapsable="true"
                       spacing="true"
-                      width="95%">
+                      width="AUTO">
                 <textField id="clientNameLabel" caption="Имя клиента"/>
                 <textField id="apartamentNumberLabel" caption="Номер апартаментов"/>
                 <textField id="dateArrivalLabel" caption="Дата прибытия"/>
                 <textField id="dateDepartureLabel" caption="Дата выселения"/>
                 <checkBox id="paymentCheckBox"  caption="Оплата заказа"/>
                 <checkBox id="prepaymentCheckBox"  caption="Предоплата заказа" />
+                <label id="covidCheckLabel" />
                 <checkBox id="covidResultCheckBox" caption="Результаты ПЦР теста на Covid-2019"/>
                 <popupButton id="paymentButton"
                              caption="Оплатить"

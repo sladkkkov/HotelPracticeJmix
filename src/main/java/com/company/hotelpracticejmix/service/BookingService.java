@@ -12,13 +12,4 @@ import java.util.List;
 @Service
 public class BookingService {
 
-
-    @Autowired
-    private DataManager dataManager;
-
-   public List<Apartaments> getFreeApartament() {
-        return dataManager.load(Apartaments.class).condition(LogicalCondition.and
-                (PropertyCondition.equal("apartament_reservation", false))).list();
-    }
-
 }
