@@ -1,24 +1,21 @@
 package com.company.hotelpracticejmix.screen.homeview;
 
 import com.company.hotelpracticejmix.entity.RegistrationCard;
-import com.company.hotelpracticejmix.entity.ResultCovid;
-import com.company.hotelpracticejmix.entity.User;
 import com.company.hotelpracticejmix.screen.registrationcard.RegistrationCardEdit;
 import com.company.hotelpracticejmix.screen.registrationcardfragment.RegistrationCardFragment;
+import com.company.hotelpracticejmix.service.RegistrationCardService;
 import io.jmix.core.DataManager;
 import io.jmix.core.Messages;
-import io.jmix.core.querycondition.PropertyCondition;
-import io.jmix.core.security.CurrentAuthentication;
 import io.jmix.ui.Fragments;
 import io.jmix.ui.ScreenBuilders;
 import io.jmix.ui.action.BaseAction;
 import io.jmix.ui.component.Button;
 import io.jmix.ui.component.GroupBoxLayout;
-import io.jmix.ui.screen.*;
-import liquibase.pro.packaged.P;
+import io.jmix.ui.screen.Screen;
+import io.jmix.ui.screen.Subscribe;
+import io.jmix.ui.screen.UiController;
+import io.jmix.ui.screen.UiDescriptor;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 @UiController("HomeUserView")
 @UiDescriptor("home-user-view.xml")
@@ -38,61 +35,80 @@ public class HomeUserView extends Screen {
 
     @Autowired
     private GroupBoxLayout groupBoxLayout;
-
+    @Autowired
+    private RegistrationCardService registrationCardService;
     @Autowired
     private DataManager dataManager;
-    @Autowired
-    private CurrentAuthentication currentAuthentication;
 
-    public User getUserByCurrentAuthentication() {
-        return dataManager
-                .load(User.class)
-                .condition(PropertyCondition
-                        .equal("username", currentAuthentication.getUser().getUsername())).one();
+    /**
+     * Метод для создания фрагмента по RegistrationCard
+     */
+    public void createRegistrationCardFragmentsByEditedEntity(RegistrationCard registrationCard){
+        RegistrationCardFragment registrationCardFragment = fragments.create(this, RegistrationCardFragment.class);
+
+        registrationCardFragment.setClientName(registrationCard.getClient().getDisplayName());
+        registrationCardFragment.setApartmentNumber(registrationCard.getApartaments().getDisplayName());
+        registrationCardFragment.setDateDeparture(registrationCard.getDepartureDate());
+        registrationCardFragment.setDateArrival(registrationCard.getArrivalDate());
+        registrationCardFragment.setPaymentIndication(registrationCard.getPaymentIndication());
+        registrationCardFragment.setPrepaymentIndication(registrationCard.getPrepaymentIndication());
+        registrationCardFragment.setUuid(registrationCard.getId());
+
+        if (registrationCard.getResultsCovidTestValidation().equals(false)) {
+            registrationCardFragment.setCovidResult(false);
+            registrationCardFragment.setCovidValidationResult(messages.getMessage("localization/validationTest"));
+
+        } else {
+            registrationCardFragment.setCovidResult(true);
+            registrationCardFragment.setCovidValidationResult(messages.getMessage("localization/acceptTest"));
+        }
+        groupBoxLayout.add(registrationCardFragment.getFragment());
+
     }
-
-    public List<RegistrationCard> getRegistrationCardsByCurrentAuthentication() {
-        return dataManager.load(RegistrationCard.class).condition(PropertyCondition.equal("user", getUserByCurrentAuthentication())).list();
-    }
-
+    /**
+     * Метод для добавления фрагментов для всех заказов из текущей авторизации
+     */
     public void getRegistrationCardFragments() {
-        List<RegistrationCard> registrationCard = getRegistrationCardsByCurrentAuthentication();
-
-        if (!registrationCard.isEmpty()) {
-            for (RegistrationCard card : registrationCard) {
-                RegistrationCardFragment registrationCardFragment = fragments.create(this, RegistrationCardFragment.class);
-                registrationCardFragment.setClientName(card.getClient().getDisplayName());
-                registrationCardFragment.setApartmentNumber(card.getApartaments().getDisplayName());
-                registrationCardFragment.setDateDeparture(card.getDepartureDate());
-                registrationCardFragment.setDateArrival(card.getArrivalDate());
-
-                if (card.getResultsCovidTestValidation().equals(false)) {
-                    registrationCardFragment.setCovidResult(false);
-                    registrationCardFragment.setCovidValidationResult(messages.getMessage("localization/validationTest"));
-
-                } else {
-                    registrationCardFragment.setCovidResult(true);
-                    registrationCardFragment.setCovidValidationResult(messages.getMessage("localization/acceptTest"));
-                }
-
-                registrationCardFragment.setPaymentIndication(card.getPaymentIndication());
-                registrationCardFragment.setPrepaymentIndication(card.getPrepaymentIndication());
-                registrationCardFragment.setUuid(card.getId());
-                groupBoxLayout.add(registrationCardFragment.getFragment());
-            }
+        for (RegistrationCard card : registrationCardService.getRegistrationCardsByCurrentAuthentication()) {
+            createRegistrationCardFragmentsByEditedEntity(card);
         }
     }
+
+    /**
+     * Метод инициализации экрана
+     */
+    private void createBookHotelButton() {
+        RegistrationCardEdit registrationCardEdit =
+                screenBuilders
+                        .screen(this)
+                        .withScreenClass(RegistrationCardEdit.class)
+                        .build();
+
+        registrationCardEdit.addAfterCloseListener(afterCloseEvent -> {
+            createRegistrationCardFragmentsByEditedEntity(registrationCardEdit.getEditedEntity());
+        });
+
+        registrationCardEdit.setEntityToEdit(dataManager.create(RegistrationCard.class));
+
+        addActionBookHotelButton(registrationCardEdit);
+    }
+    /**
+     * Метод привязывает действие открытия окна RegistrationCardEdit к кнопке
+     */
+    public void addActionBookHotelButton(RegistrationCardEdit registrationCardEdit){
+        bookHotel.setAction(new BaseAction("action")
+                .withHandler(actionPerformedEvent -> registrationCardEdit.show()));
+    }
+
 
     @Subscribe
     private void onInit(InitEvent event) {
         getRegistrationCardFragments();
+        createBookHotelButton();
 
-        bookHotel.setAction(new BaseAction("action")
-                .withHandler(actionPerformedEvent ->
-                        screenBuilders.editor(RegistrationCard.class, this)
-                                .withScreenClass(RegistrationCardEdit.class)
-                                .build().show()));
     }
+
+
 }
 
 

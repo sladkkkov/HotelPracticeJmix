@@ -2,7 +2,7 @@
 <window xmlns="http://jmix.io/schema/ui/window"
         xmlns:c="http://jmix.io/schema/ui/jpql-condition"
         caption="msg://apartamentsBrowse.caption"
-        focusComponent="apartamentsesTable">
+        focusComponent="apartmentsTable">
     <data readOnly="true">
         <collection id="apartamentsesDc"
                     class="com.company.hotelpracticejmix.entity.Apartaments">
@@ -30,12 +30,12 @@
     </actions>
     <dialogMode height="600"
                 width="800"/>
-    <layout expand="apartamentsesTable" spacing="true">
+    <layout expand="apartmentsTable" spacing="true">
         <filter id="filter"
                 dataLoader="apartamentsesDl">
             <properties include=".*"/>
         </filter>
-        <dataGrid id="apartamentsesTable"
+        <dataGrid id="apartmentsTable"
                   width="100%"
                   dataContainer="apartamentsesDc">
             <actions>
@@ -51,9 +51,9 @@
             <simplePagination/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
-                <button id="createBtn" action="apartamentsesTable.create"/>
-                <button id="editBtn" action="apartamentsesTable.edit"/>
-                <button id="removeBtn" action="apartamentsesTable.remove"/>
+                <button id="createBtn" action="apartmentsTable.create"/>
+                <button id="editBtn" action="apartmentsTable.edit"/>
+                <button id="removeBtn" action="apartmentsTable.remove"/>
             </buttonsPanel>
         </dataGrid>
         <hbox id="lookupActions" spacing="true" visible="false">

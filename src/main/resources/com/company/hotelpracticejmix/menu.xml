@@ -8,7 +8,6 @@
         <item screen="HomeUserView" caption="msg://com.company.hotelpracticejmix.screen.homeview/homeuserview.menu"/>
         <item screen="Apartaments.browse"
               caption="msg://com.company.hotelpracticejmix.screen.apartaments/apartamentsBrowse.menu"/>
-        <item screen="Calendar" caption="msg://com.company.hotelpracticejmix.screen.calendar/blankScreen.caption"/>
         <item screen="RegistrationCard.browse"
               caption="msg://com.company.hotelpracticejmix.screen.registrationcard/registrationCardBrowse.menu"/>
     </menu>

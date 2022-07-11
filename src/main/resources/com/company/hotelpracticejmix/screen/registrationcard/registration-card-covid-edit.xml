@@ -31,7 +31,7 @@
         <form id="form" dataContainer="registrationCardDc">
             <column width="350px">
                 <fileStorageUpload id="resultsCovidTestField" property="resultsCovidTest"/>
-                <checkBox id="resultsCovidTestValidationField" property="resultsCovidTestValidation"/>
+                <checkBox id="resultsCovidTestValidationField" property="resultsCovidTestValidation" caption="msg://localization/caption1"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">

@@ -1,14 +1,12 @@
 package com.company.hotelpracticejmix.screen.registrationcardfragment;
 
 import com.company.hotelpracticejmix.entity.RegistrationCard;
+import com.company.hotelpracticejmix.service.RegistrationCardService;
 import io.jmix.core.DataManager;
-import io.jmix.core.Id;
 import io.jmix.core.Messages;
 import io.jmix.ui.Dialogs;
 import io.jmix.ui.Notifications;
 import io.jmix.ui.action.Action;
-import io.jmix.ui.app.inputdialog.DialogActions;
-import io.jmix.ui.app.inputdialog.DialogOutcome;
 import io.jmix.ui.app.inputdialog.InputDialog;
 import io.jmix.ui.app.inputdialog.InputParameter;
 import io.jmix.ui.component.*;
@@ -30,7 +28,6 @@ import java.util.UUID;
 public class RegistrationCardFragment extends ScreenFragment {
     @Autowired
     private Timer timer;
-
     private long seconds = 0;
 
     @Autowired
@@ -38,26 +35,26 @@ public class RegistrationCardFragment extends ScreenFragment {
 
     @Autowired
     private Label<String> labelTimer;
+
     @Autowired
     private Notifications notifications;
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
+    @Autowired
+    DataManager dataManager;
 
-    private UUID uuid;
+    @Autowired
+    private Messages messages;
 
     @Autowired
     private TextField<String> clientNameLabel;
-
+    @Autowired
+    private RegistrationCardService registrationCardService;
     @Autowired
     private TextField<String> apartmentNumberLabel;
     @Autowired
     private TextField<String> dateArrivalLabel;
-
     @Autowired
     private CheckBox paymentCheckBox;
-
     @Autowired
     private Label<String> covidCheckLabel;
     @Autowired
@@ -67,17 +64,12 @@ public class RegistrationCardFragment extends ScreenFragment {
     @Autowired
     private TextField<String> dateDepartureLabel;
 
-    @Autowired
-    DataManager dataManager;
+
+    private Boolean covidResult;
+    private UUID uuid;
     private String clientName;
     private LocalDate dateArrival;
-
-    public void setDateDeparture(LocalDate dateDeparture) {
-        this.dateDeparture = dateDeparture;
-    }
-
     private LocalDate dateDeparture;
-
     private String covidValidationResult;
     private String apartmentNumber;
     private Boolean paymentIndication;
@@ -95,9 +87,9 @@ public class RegistrationCardFragment extends ScreenFragment {
         this.covidResult = covidResult;
     }
 
-    private Boolean covidResult;
-    @Autowired
-    private Messages messages;
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
 
     public void setApartmentNumber(String apartmentNumber) {
         this.apartmentNumber = apartmentNumber;
@@ -115,6 +107,10 @@ public class RegistrationCardFragment extends ScreenFragment {
         this.covidValidationResult = covidValidationResult;
     }
 
+    public void setDateDeparture(LocalDate dateDeparture) {
+        this.dateDeparture = dateDeparture;
+    }
+
     @Subscribe
     public void onInit(InitEvent event) {
         clientNameLabel.setValue(clientName);
@@ -127,7 +123,7 @@ public class RegistrationCardFragment extends ScreenFragment {
         covidCheckLabel.setValue(covidValidationResult);
     }
 
-    public void showNotification(String message) {
+    public void showStandardNotification(String message) {
         notifications.create(Notifications.NotificationType.TRAY)
                 .withCaption(message)
                 .show();
@@ -136,47 +132,50 @@ public class RegistrationCardFragment extends ScreenFragment {
     @Subscribe("timer")
     protected void onTimerFacetTick(Timer.TimerActionEvent event) {
         seconds += event.getSource().getDelay() / 1000;
-        labelTimer.setValue(LocalTime.ofSecondOfDay(Duration.ofDays(1).getSeconds() - seconds) + messages.getMessage("localization/makePayment"));
+        labelTimer.setValue(LocalTime.ofSecondOfDay(Duration.ofDays(1).getSeconds() - seconds) + " " + messages.getMessage("localization/makePayment"));
 
         if (seconds == Duration.ofDays(1).getSeconds()) {
-            dataManager.remove(Id.of(uuid, RegistrationCard.class));
 
-            showNotification(messages.getMessage("localization/cancelBooking"));
+            registrationCardService.deleteRegistrationCardById(uuid);
+
+            showStandardNotification(messages.getMessage("localization/cancelBooking"));
         }
     }
 
 
     @Subscribe("paymentButton.paymentAction")
     public void onPaymentButtonPaymentAction(Action.ActionPerformedEvent event) {
-        RegistrationCard registrationCard = dataManager.load(RegistrationCard.class).id(uuid).one();
-        if (registrationCard.getPaymentIndication().equals(true)) {
-            showNotification(messages.getMessage("localization/paymentAlreadyMade"));
+
+        RegistrationCard registrationCard = registrationCardService.getRegistrationCardByUuid(uuid);
+
+
+        if (registrationCard.getPrepaymentIndication().equals(true) && registrationCard.getPaymentIndication().equals(false)) {
+
+            createStandardDialogWithCaptionAndMessage(messages.getMessage("localization/successful"), messages.getMessage("localization/paymentAccepted"));
+            registrationCardService.updateRegistrationCardWithPaymentStatus(uuid, true);
+
         } else {
-            if (registrationCard.getPrepaymentIndication().equals(true)) {
 
-                dialogs.createMessageDialog()
-                        .withCaption(messages.getMessage("localization/successful"))
-                        .withMessage(messages.getMessage("localization/paymentAccepted"))
-                        .show();
-
-                registrationCard.setPaymentIndication(true);
-                registrationCard.setPaymentDate(LocalDate.now());
-                dataManager.save(registrationCard);
-            }
+            showStandardNotification(messages.getMessage("localization/paymentAlreadyMade"));
         }
+    }
 
+
+    public void createStandardDialogWithCaptionAndMessage(String caption, String message) {
+        dialogs.createMessageDialog()
+                .withCaption(caption)
+                .withMessage(message)
+                .show();
     }
 
     @Subscribe("paymentButton.allPaymentAction")
     public void onPaymentButtonAllPaymentAction(Action.ActionPerformedEvent event) {
-        RegistrationCard registrationCard = dataManager.load(RegistrationCard.class).id(uuid).one();
+        RegistrationCard registrationCard = registrationCardService.getRegistrationCardByUuid(uuid);
+
         if (registrationCard.getPrepaymentIndication().equals(true) || registrationCard.getPaymentIndication().equals(true)) {
-            showNotification(messages.getMessage("localization/paymentAlreadyDetected"));
+            showStandardNotification(messages.getMessage("localization/paymentAlreadyDetected"));
         } else {
-            dialogs.createMessageDialog()
-                    .withCaption(messages.getMessage("localization/successful"))
-                    .withMessage(messages.getMessage("localization/paymentAccepted"))
-                    .show();
+            createStandardDialogWithCaptionAndMessage(messages.getMessage("localization/successful"), messages.getMessage("localization/paymentAccepted"));
 
             registrationCard.setPaymentIndication(true);
             registrationCard.setPrepaymentIndication(true);
@@ -186,9 +185,27 @@ public class RegistrationCardFragment extends ScreenFragment {
         }
     }
 
+    @Subscribe("paymentButton.prepaymentAction")
+    public void onPaymentButtonPrepaymentAction(Action.ActionPerformedEvent event) {
+
+        RegistrationCard registrationCard = registrationCardService.getRegistrationCardByUuid(uuid);
+
+        if (registrationCard.getPrepaymentIndication().equals(false)) {
+
+            createStandardDialogWithCaptionAndMessage(messages.getMessage("localization/successful"), messages.getMessage("localization/paymentAccepted"));
+
+            registrationCardService.updateRegistrationCardWithPrepaymentStatus(uuid, true);
+
+        } else {
+
+            showStandardNotification(messages.getMessage("localization/prepaymentAlreadyMade"));
+
+        }
+    }
+
     @Subscribe("paymentButton.reschedule")
     public void onPaymentButtonReschedule(Action.ActionPerformedEvent event) {
-        RegistrationCard registrationCard = dataManager.load(RegistrationCard.class).id(uuid).one();
+        RegistrationCard registrationCard = registrationCardService.getRegistrationCardByUuid(uuid);
         if (registrationCard.getPaymentIndication().equals(true)) {
             dialogs.createInputDialog(this)
                     .withCaption(messages.getMessage("localization/paymentAccepted"))
@@ -207,49 +224,26 @@ public class RegistrationCardFragment extends ScreenFragment {
                                     .withHandler(actionEvent -> {
                                         InputDialog dialog = actionEvent.getInputDialog();
 
-                                        registrationCard.setArrivalDate(((Date) dialog.getValue("arrivalDate")).toLocalDate());
-                                        registrationCard.setDepartureDate(((Date) dialog.getValue("departureDate")).toLocalDate());
-                                        dataManager.save(registrationCard);
+                                        registrationCardService.changeArrivalAndDepartureDate(uuid, ((Date) dialog.getValue("arrivalDate")).toLocalDate(),
+                                                ((Date) dialog.getValue("departureDate")).toLocalDate());
 
                                         dialog.closeWithDefaultAction();
                                     }))
                     .show();
-        }
-        else {
-            showNotification(messages.getMessage("localization/noo"));
-        }
-    }
-
-    @Subscribe("paymentButton.prepaymentAction")
-    public void onPaymentButtonPrepaymentAction(Action.ActionPerformedEvent event) {
-
-        RegistrationCard registrationCard = dataManager.load(RegistrationCard.class).id(uuid).one();
-        if (registrationCard.getPrepaymentIndication().equals(true)) {
-            showNotification(messages.getMessage("localization/prepaymentAlreadyMade"));
         } else {
-
-            dialogs.createMessageDialog()
-                    .withCaption(messages.getMessage("localization/successful"))
-                    .withMessage(messages.getMessage("localization/paymentAccepted"))
-                    .show();
-
-            registrationCard.setPrepaymentIndication(true);
-            registrationCard.setPrepaymentDate(LocalDate.now());
-            dataManager.save(registrationCard);
+            showStandardNotification(messages.getMessage("localization/noo"));
         }
     }
+
 
     @Subscribe("prepaymentCheckBox")
     public void onPrepaymentCheckBoxValueChange(HasValue.ValueChangeEvent<Boolean> event) {
         timer.stop();
 
-        RegistrationCard registrationCard = dataManager.load(RegistrationCard.class).id(uuid).one();
-        registrationCard.setPrepaymentIndication(true);
-        registrationCard.setPrepaymentDate(LocalDate.now());
-        dataManager.save(registrationCard);
+        registrationCardService.updateRegistrationCardWithPrepaymentStatus(uuid, true);
 
         labelTimer.setValue(messages.getMessage("localization/prepaymentTaken"));
 
-        showNotification(messages.getMessage("localization/prepaymentTaken"));
+        showStandardNotification(messages.getMessage("localization/prepaymentTaken"));
     }
 }

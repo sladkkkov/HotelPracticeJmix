@@ -10,6 +10,4 @@ import io.jmix.ui.screen.UiDescriptor;
 @UiDescriptor("apartaments-edit.xml")
 @EditedEntityContainer("apartamentsDc")
 public class ApartamentsEdit extends StandardEditor<Apartaments> {
-
-
 }

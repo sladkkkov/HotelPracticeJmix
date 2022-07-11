@@ -14,8 +14,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 
 import javax.sql.DataSource;
-import java.util.Scanner;
-import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class HotelPracticeJmixApplication {
@@ -23,7 +21,9 @@ public class HotelPracticeJmixApplication {
     @Autowired
     private Environment environment;
 
-    public static void main(String[] args) {SpringApplication.run(HotelPracticeJmixApplication.class, args);}
+    public static void main(String[] args) {
+        SpringApplication.run(HotelPracticeJmixApplication.class, args);
+    }
 
     @Bean
     @Primary

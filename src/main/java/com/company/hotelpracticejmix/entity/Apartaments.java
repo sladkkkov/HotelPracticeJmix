@@ -74,7 +74,7 @@ public class Apartaments {
         return String.format("Комната №%s",  numberApartament).trim();
     }
 
-    public Long getNumberApartament() {
+    public @Max(25) @Min(1) Long getNumberApartament() {
         return numberApartament;
     }
 
