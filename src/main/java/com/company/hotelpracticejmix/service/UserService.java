@@ -33,11 +33,8 @@ public class UserService {
      * Метод получения списка RegistrationCard по конкретному Апартаменту
      */
     public void setUserByRegistrationCardIfNotAdmin(RegistrationCard registrationCard) {
-        String fullAccessRole = "system-full-access";
-        if (!getRoleName(currentAuthentication.getAuthentication()).equals(fullAccessRole)) {
             registrationCard.setUser(getUserByCurrentAuthentication());
             dataManager.save(registrationCard);
-        }
     }
 
     /**

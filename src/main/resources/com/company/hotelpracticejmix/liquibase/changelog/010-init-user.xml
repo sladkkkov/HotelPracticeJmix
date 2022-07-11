@@ -76,4 +76,28 @@
 
     </changeSet>
 
+    <changeSet id="5" author="sladkkov@yandex.ru">
+
+        <insert tableName="USER_" dbms="postgresql, mssql, hsqldb">
+            <column name="ID" value="1d3494c6-016d-11ed-85e3-b34b0878e8ad"/>
+            <column name="VERSION" value="1"/>
+            <column name="USERNAME" value="user"/>
+            <column name="PASSWORD" value="{noop}user"/>
+            <column name="ACTIVE" valueBoolean="true"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="6" author="sladkkov@yandex.ru">
+
+        <insert tableName="SEC_ROLE_ASSIGNMENT" dbms="postgresql, mssql, hsqldb">
+            <column name="ID" value="19d7933c-016d-11ed-a780-3fce06547859"/>
+            <column name="VERSION" value="1"/>
+            <column name="USERNAME" value="user"/>
+            <column name="ROLE_CODE" value="simple-user"/>
+            <column name="ROLE_TYPE" value="resource"/>
+        </insert>
+
+    </changeSet>
+
+
 </databaseChangeLog>

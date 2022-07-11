@@ -7,6 +7,7 @@ import com.company.hotelpracticejmix.service.RegistrationCardService;
 import io.jmix.core.DataManager;
 import io.jmix.core.Messages;
 import io.jmix.ui.Fragments;
+import io.jmix.ui.Notifications;
 import io.jmix.ui.ScreenBuilders;
 import io.jmix.ui.action.BaseAction;
 import io.jmix.ui.component.Button;
@@ -16,6 +17,8 @@ import io.jmix.ui.screen.Subscribe;
 import io.jmix.ui.screen.UiController;
 import io.jmix.ui.screen.UiDescriptor;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 @UiController("HomeUserView")
 @UiDescriptor("home-user-view.xml")
@@ -40,10 +43,13 @@ public class HomeUserView extends Screen {
     @Autowired
     private DataManager dataManager;
 
+    @Autowired
+    private Notifications notifications;
+
     /**
      * Метод для создания фрагмента по RegistrationCard
      */
-    public void createRegistrationCardFragmentsByEditedEntity(RegistrationCard registrationCard){
+    public void createRegistrationCardFragmentsByEditedEntity(RegistrationCard registrationCard) {
         RegistrationCardFragment registrationCardFragment = fragments.create(this, RegistrationCardFragment.class);
 
         registrationCardFragment.setClientName(registrationCard.getClient().getDisplayName());
@@ -65,12 +71,19 @@ public class HomeUserView extends Screen {
         groupBoxLayout.add(registrationCardFragment.getFragment());
 
     }
+
     /**
      * Метод для добавления фрагментов для всех заказов из текущей авторизации
      */
     public void getRegistrationCardFragments() {
-        for (RegistrationCard card : registrationCardService.getRegistrationCardsByCurrentAuthentication()) {
-            createRegistrationCardFragmentsByEditedEntity(card);
+        List<RegistrationCard> list = registrationCardService.getRegistrationCardsByCurrentAuthentication();
+        if (list.isEmpty()) {
+            notifications.create(Notifications.NotificationType.TRAY)
+                    .withCaption(messages.getMessage("localization/orderNotFound"))
+                    .show();
+            for (RegistrationCard card : registrationCardService.getRegistrationCardsByCurrentAuthentication()) {
+                createRegistrationCardFragmentsByEditedEntity(card);
+            }
         }
     }
 
@@ -92,10 +105,11 @@ public class HomeUserView extends Screen {
 
         addActionBookHotelButton(registrationCardEdit);
     }
+
     /**
      * Метод привязывает действие открытия окна RegistrationCardEdit к кнопке
      */
-    public void addActionBookHotelButton(RegistrationCardEdit registrationCardEdit){
+    public void addActionBookHotelButton(RegistrationCardEdit registrationCardEdit) {
         bookHotel.setAction(new BaseAction("action")
                 .withHandler(actionPerformedEvent -> registrationCardEdit.show()));
     }

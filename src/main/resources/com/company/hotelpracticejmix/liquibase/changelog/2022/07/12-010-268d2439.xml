@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="HotelPracticeJmix">
+        <createTable tableName="APARTAMENTS">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_APARTAMENTS"/>
+            </column>
+            <column name="NUMBER_APARTAMENT" type="BIGINT"/>
+            <column name="APARTAMENT_RESERVATION" type="BOOLEAN"/>
+            <column name="APARTMENT_TAKEN" type="BOOLEAN"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATETIME"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="DATETIME"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="HotelPracticeJmix">
+        <createTable tableName="REGISTRATION_CARD">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_REGISTRATION_CARD"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATETIME"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="DATETIME"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="DATETIME"/>
+            <column name="CLIENT_ID" type="UUID"/>
+            <column name="APARTAMENTS_ID" type="UUID"/>
+            <column name="RESULTS_COVID_TEST" type="VARCHAR(255)"/>
+            <column name="RESULTS_COVID_TEST_VALIDATION" type="BOOLEAN"/>
+            <column name="PAYMENT_DATE" type="DATE"/>
+            <column name="PREPAYMENT_DATE" type="DATE"/>
+            <column name="PREPAYMENT_INDICATION" type="BOOLEAN"/>
+            <column name="PAYMENT_INDICATION" type="BOOLEAN"/>
+            <column name="ARRIVAL_DATE" type="DATE"/>
+            <column name="DEPARTURE_DATE" type="DATE"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="HotelPracticeJmix">
+        <createTable tableName="SAMPLER_CALENDAR_EVENT">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_SAMPLER_CALENDAR_EVENT"/>
+            </column>
+            <column name="CAPTION" type="VARCHAR(255)"/>
+            <column name="DESCRIPTION" type="VARCHAR(255)"/>
+            <column name="START_DATE" type="DATETIME"/>
+            <column name="END_DATE" type="DATETIME"/>
+            <column name="STYLENAME" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="4" author="HotelPracticeJmix">
+        <addColumn tableName="USER_">
+            <column name="CONTACT_EMAIL" type="VARCHAR(255)"/>
+            <column name="CONTACT_TELEPHONE" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="5" author="HotelPracticeJmix">
+        <createIndex indexName="IDX_REGISTRATIONCARD" tableName="REGISTRATION_CARD">
+            <column name="APARTAMENTS_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="APARTAMENTS_ID" baseTableName="REGISTRATION_CARD"
+                                 constraintName="FK_REGISTRATION_ON_APARTAMENTS" referencedColumnNames="ID"
+                                 referencedTableName="APARTAMENTS"/>
+    </changeSet>
+    <changeSet id="6" author="HotelPracticeJmix" dbms="postgresql">
+        <createIndex indexName="IDX_UC_APARTAMENTS_NUMBERAPARTAMEN" tableName="APARTAMENTS" unique="true">
+            <column name="NUMBER_APARTAMENT"/>
+        </createIndex>
+
+        <modifySql>
+            <append value="where DELETED_DATE is null"/>
+        </modifySql>
+    </changeSet>
+    <changeSet id="7" author="HotelPracticeJmix">
+        <addForeignKeyConstraint baseColumnNames="CLIENT_ID" baseTableName="REGISTRATION_CARD"
+                                 constraintName="FK_REGISTRATION_CARD_ON_CLIENT" referencedColumnNames="ID"
+                                 referencedTableName="USER_"/>
+    </changeSet>
+    <changeSet id="8" author="HotelPracticeJmix">
+        <dropColumn columnName="email" tableName="user_"/>
+    </changeSet>
+
+    <changeSet id="9" author="sladkkov@yandex.ru">
+        <insert tableName="apartaments">
+            <column name="id" value="1614c83c-016d-11ed-a704-4bca596956ab"/>
+            <column name="number_apartament" value="5"/>
+            <column name="apartament_reservation" value="false"/>
+            <column name="apartment_taken" value="false"/>
+            <column name="version" value="1"/>
+            <column name="created_by" value="admin"/>
+            <column name="created_date" value="2022-07-11 09:40:03.603000"/>
+        </insert>
+    </changeSet>
+    <changeSet id="10" author="sladkkov@yandex.ru">
+        <insert tableName="apartaments">
+            <column name="id" value="1221fc90-016d-11ed-bf1a-0b513d3a8436"/>
+            <column name="number_apartament" value="4"/>
+            <column name="apartament_reservation" value="false"/>
+            <column name="apartment_taken" value="false"/>
+            <column name="version" value="1"/>
+            <column name="created_by" value="admin"/>
+            <column name="created_date" value="2022-07-11 09:40:03.603000"/>
+        </insert>
+    </changeSet>
+    <changeSet id="11" author="sladkkov@yandex.ru">
+        <insert tableName="apartaments">
+            <column name="id" value="0db52cd6-016d-11ed-b8c3-c38f0d41956c"/>
+            <column name="number_apartament" value="3"/>
+            <column name="apartament_reservation" value="false"/>
+            <column name="apartment_taken" value="false"/>
+            <column name="version" value="1"/>
+            <column name="created_by" value="admin"/>
+            <column name="created_date" value="2022-07-11 09:40:03.603000"/>
+        </insert>
+    </changeSet>
+    <changeSet id="12" author="sladkkov@yandex.ru">
+        <insert tableName="apartaments">
+            <column name="id" value="094e873c-016d-11ed-97ce-b79d52eb9ff8"/>
+            <column name="number_apartament" value="2"/>
+            <column name="apartament_reservation" value="false"/>
+            <column name="apartment_taken" value="false"/>
+            <column name="version" value="1"/>
+            <column name="created_by" value="admin"/>
+            <column name="created_date" value="2022-07-11 09:40:03.603000"/>
+        </insert>
+    </changeSet>
+    <changeSet id="13" author="sladkkov@yandex.ru">
+        <insert tableName="apartaments">
+            <column name="id" value="02c90d2e-016d-11ed-904a-978655dd2abc"/>
+            <column name="number_apartament" value="1"/>
+            <column name="apartament_reservation" value="false"/>
+            <column name="apartment_taken" value="false"/>
+            <column name="version" value="1"/>
+            <column name="created_by" value="admin"/>
+            <column name="created_date" value="2022-07-11 09:40:03.603000"/>
+        </insert>
+    </changeSet>
+    <changeSet id="14" author="sladkkov@yandex.ru">
+        <insert tableName="registration_card">
+            <column name="id" value="0e3965f0-615b-da3e-26d5-c18a85e15111"/>
+            <column name="client_id" value="1d3494c6-016d-11ed-85e3-b34b0878e8ad"/>
+            <column name="apartaments_id" value="02c90d2e-016d-11ed-904a-978655dd2abc"/>
+            <column name="results_covid_test" value="fs://2022/07/12/08985509-4d86-725c-2ae9-ad86a63264c1.pdf?name=Docker-Cheat-Sheet-Cloud.pdf"/>
+            <column name="prepayment_indication" value="false"/>
+            <column name="payment_indication" value="false"/>
+            <column name="arrival_date" value="2022-07-12"/>
+            <column name="departure_date" value="2022-07-15"/>
+            <column name="version" value="1"/>
+
+        </insert>
+    </changeSet>
+
+    <changeSet id="15" author="sladkkov@yandex.ru">
+        <insert tableName="registration_card">
+            <column name="id" value="353692f1-3ade-27a4-8ec9-c646989f044b"/>
+            <column name="client_id" value="1d3494c6-016d-11ed-85e3-b34b0878e8ad"/>
+            <column name="apartaments_id" value="1221fc90-016d-11ed-bf1a-0b513d3a8436"/>
+            <column name="results_covid_test" value="fs://2022/07/12/08985509-4d86-725c-2ae9-ad86a63264c1.pdf?name=Docker-Cheat-Sheet-Cloud.pdf"/>
+            <column name="prepayment_indication" value="false"/>
+            <column name="payment_indication" value="false"/>
+            <column name="arrival_date" value="2022-07-12"/>
+            <column name="departure_date" value="2022-07-15"/>
+            <column name="version" value="1"/>
+
+        </insert>
+    </changeSet>
+
+    <changeSet id="16" author="sladkkov@yandex.ru">
+        <insert tableName="registration_card">
+            <column name="id" value="ac1b92b5-7be5-1d9d-37d7-3d7947baad55"/>
+            <column name="client_id" value="1d3494c6-016d-11ed-85e3-b34b0878e8ad"/>
+            <column name="apartaments_id" value="1614c83c-016d-11ed-a704-4bca596956ab"/>
+            <column name="results_covid_test" value="fs://2022/07/12/08985509-4d86-725c-2ae9-ad86a63264c1.pdf?name=Docker-Cheat-Sheet-Cloud.pdf"/>
+            <column name="prepayment_indication" value="false"/>
+            <column name="payment_indication" value="false"/>
+            <column name="version" value="1"/>
+            <column name="arrival_date" value="2022-07-12"/>
+            <column name="departure_date" value="2022-07-15"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="17" author="sladkkov@yandex.ru">
+        <insert tableName="registration_card">
+            <column name="id" value="60885987-1b61-4247-94c7-dff348347f93"/>
+            <column name="client_id" value="60885987-1b61-4247-94c7-dff348347f93"/>
+            <column name="apartaments_id" value="1614c83c-016d-11ed-a704-4bca596956ab"/>
+            <column name="results_covid_test" value="fs://2022/07/12/08985509-4d86-725c-2ae9-ad86a63264c1.pdf?name=Docker-Cheat-Sheet-Cloud.pdf"/>
+            <column name="prepayment_indication" value="false"/>
+            <column name="payment_indication" value="false"/>
+            <column name="version" value="1"/>
+            <column name="arrival_date" value="2022-07-25"/>
+            <column name="departure_date" value="2022-07-29"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
