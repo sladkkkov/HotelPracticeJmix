@@ -7,13 +7,19 @@ import io.jmix.core.Messages;
 import io.jmix.ui.Dialogs;
 import io.jmix.ui.Notifications;
 import io.jmix.ui.action.Action;
+import io.jmix.ui.app.inputdialog.DialogActions;
+import io.jmix.ui.app.inputdialog.DialogOutcome;
+import io.jmix.ui.app.inputdialog.InputDialog;
+import io.jmix.ui.app.inputdialog.InputParameter;
 import io.jmix.ui.component.*;
+import io.jmix.ui.component.inputdialog.InputDialogAction;
 import io.jmix.ui.screen.ScreenFragment;
 import io.jmix.ui.screen.Subscribe;
 import io.jmix.ui.screen.UiController;
 import io.jmix.ui.screen.UiDescriptor;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.sql.Date;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -177,6 +183,40 @@ public class RegistrationCardFragment extends ScreenFragment {
             registrationCard.setPrepaymentDate(LocalDate.now());
             registrationCard.setPaymentDate(LocalDate.now());
             dataManager.save(registrationCard);
+        }
+    }
+
+    @Subscribe("paymentButton.reschedule")
+    public void onPaymentButtonReschedule(Action.ActionPerformedEvent event) {
+        RegistrationCard registrationCard = dataManager.load(RegistrationCard.class).id(uuid).one();
+        if (registrationCard.getPaymentIndication().equals(true)) {
+            dialogs.createInputDialog(this)
+                    .withCaption(messages.getMessage("localization/paymentAccepted"))
+                    .withParameters(
+                            InputParameter.dateParameter("arrivalDate")
+                                    .withCaption(messages.getMessage("localization/arrivalDate"))
+                                    .withRequired(true),
+                            InputParameter.dateParameter("departureDate")
+                                    .withCaption(messages.getMessage("localization/departureDate"))
+                                    .withRequired(true)
+                    )
+                    .withActions(
+                            InputDialogAction.action("confirm")
+                                    .withCaption(messages.getMessage("localization/accept"))
+                                    .withPrimary(true)
+                                    .withHandler(actionEvent -> {
+                                        InputDialog dialog = actionEvent.getInputDialog();
+
+                                        registrationCard.setArrivalDate(((Date) dialog.getValue("arrivalDate")).toLocalDate());
+                                        registrationCard.setDepartureDate(((Date) dialog.getValue("departureDate")).toLocalDate());
+                                        dataManager.save(registrationCard);
+
+                                        dialog.closeWithDefaultAction();
+                                    }))
+                    .show();
+        }
+        else {
+            showNotification(messages.getMessage("localization/noo"));
         }
     }
 

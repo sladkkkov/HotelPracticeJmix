@@ -5,8 +5,7 @@
                autostart="true"
                repeating="true"
                delay="1000"/>
-
-    </facets>
+      </facets>
     <layout>
             <groupBox id="registrationCardBox"
                       caption="msg://localization/caption"
@@ -28,6 +27,7 @@
                         <action id="prepaymentAction" caption="msg://localization/makePrepayment"/>
                         <action id="paymentAction" caption="msg://localization/makeAPayment"/>
                         <action id="allPaymentAction" caption="msg://localization/makeFullPayment"/>
+                        <action id="reschedule" caption="msg://reschedule"/>
                     </actions>
                 </popupButton>
                 <label id="labelTimer"/>
