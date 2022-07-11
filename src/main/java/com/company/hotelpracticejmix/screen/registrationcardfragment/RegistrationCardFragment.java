@@ -3,6 +3,7 @@ package com.company.hotelpracticejmix.screen.registrationcardfragment;
 import com.company.hotelpracticejmix.entity.RegistrationCard;
 import io.jmix.core.DataManager;
 import io.jmix.core.Id;
+import io.jmix.core.Messages;
 import io.jmix.ui.Dialogs;
 import io.jmix.ui.Notifications;
 import io.jmix.ui.action.Action;
@@ -89,6 +90,8 @@ public class RegistrationCardFragment extends ScreenFragment {
     }
 
     private Boolean covidResult;
+    @Autowired
+    private Messages messages;
 
     public void setApartmentNumber(String apartmentNumber) {
         this.apartmentNumber = apartmentNumber;
@@ -127,12 +130,12 @@ public class RegistrationCardFragment extends ScreenFragment {
     @Subscribe("timer")
     protected void onTimerFacetTick(Timer.TimerActionEvent event) {
         seconds += event.getSource().getDelay() / 1000;
-        labelTimer.setValue(LocalTime.ofSecondOfDay(Duration.ofDays(1).getSeconds() - seconds) + " внесите предоплату.");
+        labelTimer.setValue(LocalTime.ofSecondOfDay(Duration.ofDays(1).getSeconds() - seconds) + messages.getMessage("localization/makePayment"));
 
         if (seconds == Duration.ofDays(1).getSeconds()) {
             dataManager.remove(Id.of(uuid, RegistrationCard.class));
 
-            showNotification("Бронирование было отменено. Вы не произвели предоплату в течении суток.");
+            showNotification(messages.getMessage("localization/cancelBooking"));
         }
     }
 
@@ -141,13 +144,13 @@ public class RegistrationCardFragment extends ScreenFragment {
     public void onPaymentButtonPaymentAction(Action.ActionPerformedEvent event) {
         RegistrationCard registrationCard = dataManager.load(RegistrationCard.class).id(uuid).one();
         if (registrationCard.getPaymentIndication().equals(true)) {
-            showNotification("Оплата уже внесена");
+            showNotification(messages.getMessage("localization/paymentAlreadyMade"));
         } else {
             if (registrationCard.getPrepaymentIndication().equals(true)) {
 
                 dialogs.createMessageDialog()
-                        .withCaption("Успешно")
-                        .withMessage("Ваша оплата принята")
+                        .withCaption(messages.getMessage("localization/successful"))
+                        .withMessage(messages.getMessage("localization/paymentAccepted"))
                         .show();
 
                 registrationCard.setPaymentIndication(true);
@@ -162,11 +165,11 @@ public class RegistrationCardFragment extends ScreenFragment {
     public void onPaymentButtonAllPaymentAction(Action.ActionPerformedEvent event) {
         RegistrationCard registrationCard = dataManager.load(RegistrationCard.class).id(uuid).one();
         if (registrationCard.getPrepaymentIndication().equals(true) || registrationCard.getPaymentIndication().equals(true)) {
-            showNotification("Ваш заказ уже частично оплачен");
+            showNotification(messages.getMessage("localization/paymentAlreadyDetected"));
         } else {
             dialogs.createMessageDialog()
-                    .withCaption("Успешно")
-                    .withMessage("Ваша оплата принята")
+                    .withCaption(messages.getMessage("localization/successful"))
+                    .withMessage(messages.getMessage("localization/paymentAccepted"))
                     .show();
 
             registrationCard.setPaymentIndication(true);
@@ -182,12 +185,12 @@ public class RegistrationCardFragment extends ScreenFragment {
 
         RegistrationCard registrationCard = dataManager.load(RegistrationCard.class).id(uuid).one();
         if (registrationCard.getPrepaymentIndication().equals(true)) {
-            showNotification("Предоплата уже внесена");
+            showNotification(messages.getMessage("localization/prepaymentAlreadyMade"));
         } else {
 
             dialogs.createMessageDialog()
-                    .withCaption("Успешно")
-                    .withMessage("Ваша оплата принята")
+                    .withCaption(messages.getMessage("localization/successful"))
+                    .withMessage(messages.getMessage("localization/paymentAccepted"))
                     .show();
 
             registrationCard.setPrepaymentIndication(true);
@@ -205,8 +208,8 @@ public class RegistrationCardFragment extends ScreenFragment {
         registrationCard.setPrepaymentDate(LocalDate.now());
         dataManager.save(registrationCard);
 
-        labelTimer.setValue("Предоплата произведена");
+        labelTimer.setValue(messages.getMessage("localization/prepaymentTaken"));
 
-        showNotification("Предоплата произведена");
+        showNotification(messages.getMessage("localization/prepaymentTaken"));
     }
 }

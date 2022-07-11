@@ -6,6 +6,7 @@ import com.company.hotelpracticejmix.entity.User;
 import com.company.hotelpracticejmix.screen.registrationcard.RegistrationCardEdit;
 import com.company.hotelpracticejmix.screen.registrationcardfragment.RegistrationCardFragment;
 import io.jmix.core.DataManager;
+import io.jmix.core.Messages;
 import io.jmix.core.querycondition.PropertyCondition;
 import io.jmix.core.security.CurrentAuthentication;
 import io.jmix.ui.Fragments;
@@ -22,6 +23,9 @@ import java.util.List;
 @UiController("HomeUserView")
 @UiDescriptor("home-user-view.xml")
 public class HomeUserView extends Screen {
+
+    @Autowired
+    private Messages messages;
 
     @Autowired
     protected Button bookHotel;
@@ -64,10 +68,11 @@ public class HomeUserView extends Screen {
 
                 if (card.getResultsCovidTestValidation().equals(false)) {
                     registrationCardFragment.setCovidResult(false);
-                    registrationCardFragment.setCovidValidationResult("Ваша заявка ожидает рассмотрения");
+                    registrationCardFragment.setCovidValidationResult(messages.getMessage("localization/validationTest"));
+
                 } else {
                     registrationCardFragment.setCovidResult(true);
-                    registrationCardFragment.setCovidValidationResult("Результаты теста приняты");
+                    registrationCardFragment.setCovidValidationResult(messages.getMessage("localization/acceptTest"));
                 }
 
                 registrationCardFragment.setPaymentIndication(card.getPaymentIndication());
@@ -76,10 +81,6 @@ public class HomeUserView extends Screen {
                 groupBoxLayout.add(registrationCardFragment.getFragment());
             }
         }
-    }
-
-    public void covidTestValidation() {
-
     }
 
     @Subscribe

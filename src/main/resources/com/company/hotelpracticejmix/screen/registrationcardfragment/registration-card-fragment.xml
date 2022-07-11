@@ -9,25 +9,25 @@
     </facets>
     <layout>
             <groupBox id="registrationCardBox"
-                      caption="Заказ"
+                      caption="msg://localization/caption"
                       collapsable="true"
                       spacing="true"
                       width="AUTO">
-                <textField id="clientNameLabel" caption="Имя клиента"/>
-                <textField id="apartmentNumberLabel" caption="Номер апартаментов"/>
-                <textField id="dateArrivalLabel" caption="Дата прибытия"/>
-                <textField id="dateDepartureLabel" caption="Дата выселения"/>
-                <checkBox id="paymentCheckBox"  caption="Оплата заказа"/>
-                <checkBox id="prepaymentCheckBox"  caption="Предоплата заказа" />
+                <textField id="clientNameLabel" caption="msg://localization/nameClient"/>
+                <textField id="apartmentNumberLabel" caption="msg://localization/numberApartament"/>
+                <textField id="dateArrivalLabel" caption="msg://localization/dateArrival"/>
+                <textField id="dateDepartureLabel" caption="msg://localization/dateDeparture"/>
+                <checkBox id="paymentCheckBox"  caption="msg://localization/paymentAction"/>
+                <checkBox id="prepaymentCheckBox"  caption="msg://localization/prepaymentAction" />
                 <label id="covidCheckLabel" />
-                <checkBox id="covidResultCheckBox" caption="Результаты ПЦР теста на Covid-2019"/>
+                <checkBox id="covidResultCheckBox" caption="msg://localization/resultsCovidTest"/>
                 <popupButton id="paymentButton"
-                             caption="Оплатить"
+                             caption="msg://localization/payment"
                              icon="SAVE">
                     <actions>
-                        <action id="prepaymentAction" caption="Внести предоплату"/>
-                        <action id="paymentAction" caption="Внести основную часть"/>
-                        <action id="allPaymentAction" caption="Оплатить полностью"/>
+                        <action id="prepaymentAction" caption="msg://localization/makePrepayment"/>
+                        <action id="paymentAction" caption="msg://localization/makeAPayment"/>
+                        <action id="allPaymentAction" caption="msg://localization/makeFullPayment"/>
                     </actions>
                 </popupButton>
                 <label id="labelTimer"/>
