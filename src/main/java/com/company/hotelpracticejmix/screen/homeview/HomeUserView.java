@@ -1,6 +1,7 @@
 package com.company.hotelpracticejmix.screen.homeview;
 
 import com.company.hotelpracticejmix.entity.RegistrationCard;
+import com.company.hotelpracticejmix.entity.ResultCovid;
 import com.company.hotelpracticejmix.entity.User;
 import com.company.hotelpracticejmix.screen.registrationcard.RegistrationCardEdit;
 import com.company.hotelpracticejmix.screen.registrationcardfragment.RegistrationCardFragment;
@@ -13,6 +14,7 @@ import io.jmix.ui.action.BaseAction;
 import io.jmix.ui.component.Button;
 import io.jmix.ui.component.GroupBoxLayout;
 import io.jmix.ui.screen.*;
+import liquibase.pro.packaged.P;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -59,13 +61,25 @@ public class HomeUserView extends Screen {
                 registrationCardFragment.setApartmentNumber(card.getApartaments().getDisplayName());
                 registrationCardFragment.setDateDeparture(card.getDepartureDate());
                 registrationCardFragment.setDateArrival(card.getArrivalDate());
-                registrationCardFragment.setCovidResult(true);
+
+                if (card.getResultsCovidTestValidation().equals(false)) {
+                    registrationCardFragment.setCovidResult(false);
+                    registrationCardFragment.setCovidValidationResult("Ваша заявка ожидает рассмотрения");
+                } else {
+                    registrationCardFragment.setCovidResult(true);
+                    registrationCardFragment.setCovidValidationResult("Результаты теста приняты");
+                }
+
                 registrationCardFragment.setPaymentIndication(card.getPaymentIndication());
                 registrationCardFragment.setPrepaymentIndication(card.getPrepaymentIndication());
                 registrationCardFragment.setUuid(card.getId());
                 groupBoxLayout.add(registrationCardFragment.getFragment());
             }
         }
+    }
+
+    public void covidTestValidation() {
+
     }
 
     @Subscribe

@@ -44,12 +44,15 @@ public class RegistrationCardFragment extends ScreenFragment {
     private TextField<String> clientNameLabel;
 
     @Autowired
-    private TextField<String> apartamentNumberLabel;
+    private TextField<String> apartmentNumberLabel;
     @Autowired
     private TextField<String> dateArrivalLabel;
 
     @Autowired
     private CheckBox paymentCheckBox;
+
+    @Autowired
+    private Label<String> covidCheckLabel;
     @Autowired
     private CheckBox prepaymentCheckBox;
     @Autowired
@@ -67,7 +70,9 @@ public class RegistrationCardFragment extends ScreenFragment {
     }
 
     private LocalDate dateDeparture;
-    private String apartanemtNumber;
+
+    private String covidValidationResult;
+    private String apartmentNumber;
     private Boolean paymentIndication;
     private Boolean prepaymentIndication;
 
@@ -86,7 +91,7 @@ public class RegistrationCardFragment extends ScreenFragment {
     private Boolean covidResult;
 
     public void setApartmentNumber(String apartmentNumber) {
-        this.apartanemtNumber = apartmentNumber;
+        this.apartmentNumber = apartmentNumber;
     }
 
     public void setDateArrival(LocalDate dateArrival) {
@@ -97,16 +102,20 @@ public class RegistrationCardFragment extends ScreenFragment {
         this.clientName = clientName;
     }
 
+    public void setCovidValidationResult(String covidValidationResult) {
+        this.covidValidationResult = covidValidationResult;
+    }
 
     @Subscribe
     public void onInit(InitEvent event) {
         clientNameLabel.setValue(clientName);
-        apartamentNumberLabel.setValue(apartanemtNumber);
+        apartmentNumberLabel.setValue(apartmentNumber);
         dateArrivalLabel.setValue(String.valueOf(dateArrival));
         dateDepartureLabel.setValue(String.valueOf(dateDeparture));
         covidResultCheckBox.setValue(covidResult);
         paymentCheckBox.setValue(paymentIndication);
         prepaymentCheckBox.setValue(prepaymentIndication);
+        covidCheckLabel.setValue(covidValidationResult);
     }
 
     public void showNotification(String message) {

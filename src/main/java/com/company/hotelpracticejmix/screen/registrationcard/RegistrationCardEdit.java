@@ -25,17 +25,13 @@ import java.util.stream.Collectors;
 public class RegistrationCardEdit extends StandardEditor<RegistrationCard> {
     @Autowired
     private CurrentAuthentication currentAuthentication;
-
-    private static final Logger log =
-            LoggerFactory.getLogger(RegistrationCardEdit.class);
-
     @Autowired
     private InstanceContainer<RegistrationCard> registrationCardDc;
     @Autowired
     private DataManager dataManager;
 
     public void getUserRegistrationCardOnScreen(){
-        if (getRoleNames(currentAuthentication.getAuthentication()).equals("system-full-access")) { //TODO .equals(ROLE.admin)
+        if (getRoleNames(currentAuthentication.getAuthentication()).equals("system-full-access")) {
             User user = dataManager
                     .load(User.class)
                     .condition(PropertyCondition

@@ -76,6 +76,8 @@
                 <button id="createBtn" action="registrationCardsTable.create"/>
                 <button id="editBtn" action="registrationCardsTable.edit"/>
                 <button id="removeBtn" action="registrationCardsTable.remove"/>
+                <button id="validationCovidBtn" caption="Проверить тест"/>
+
             </buttonsPanel>
         </table>
         <hbox id="lookupActions" spacing="true" visible="false">
